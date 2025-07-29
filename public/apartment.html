@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apartment Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 20px;
+    }
+    .apartment-image {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .detail-box {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+      <div class="container1">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html"><img src="/img/logo.png" alt="logo" width="30" height="24"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <p class="nav-link" aria-current="page">Destination:</p>
+        </li> 
+        <form class="d-flex" role="search" id="mainSearch">
+        <input class="form-control me-2" type="search" placeholder="Search for your desired destination" aria-label="Search"/>
+        
+        </form>
+        <li class="nav-item">
+          <p class="nav-link " aria-current="page">Check in:</p>
+        </li> 
+        <li class="nav-item">
+          <input type="date" class="nav-link" id="checkIn">
+        </li>
+        <li class="nav-item">
+            <span class="checkInError " id="checkInError"></span>
+        </li>
+        <li class="nav-item">
+          <p class="nav-link " aria-current="page">Check out:</p>
+        </li> 
+        <li class="nav-item">
+          <input type="date" class="nav-link" id="checkOut">
+        </li>
+        <li class="nav-item">
+            <span class="checkOutError " id="checkOutError"></span>
+        </li>
+        <li class="nav-item">
+          <p class="nav-link " aria-current="page">Number of guests:</p>
+        </li>
+        <li class="nav-item">
+          <div class="guests ">
+            <button id="minusButton" class="">-</button><p class="numberOfguests" id="numberOfGuests">0</p><button id="plusButton">+</button>
+          </div>
+          <li class="nav-item">
+            <span id="maxGuests" class="text-warning small d-block" style="display: none;">This is the maximum number of guests</span>
+          </li>
+          
+        </li>
+        <li class="nav-item ">
+          <button class="btn btn-outline-success " type="submit" form="mainSearch" onclick="checkDate(event)">&#128269;</button>
+        </li>
+        
+      </ul>
+      
+    </div>
+  </div>
+</nav>
+    </div>
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="text-center">Apartment Details</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-12 mb-4">
+        <img id="apartmentImage" src="/img/placeholder.png" alt="Apartment Image" class="apartment-image">
+      </div>
+      <div class="col-lg-6 col-md-12">
+        <div class="detail-box">
+          <h3 id="apartmentTitle">Loading...</h3>
+          <p id="apartmentDescription"></p>
+          <ul class="list-group mb-3">
+            <li class="list-group-item"><strong>Price:</strong> €<span id="apartmentPrice"></span> / night</li>
+            <li class="list-group-item"><strong>Guests:</strong> <span id="apartmentGuests"></span></li>
+            <li class="list-group-item"><strong>Bedrooms:</strong> <span id="apartmentBedrooms"></span></li>
+            <li class="list-group-item"><strong>Bathrooms:</strong> <span id="apartmentBathrooms"></span></li>
+            <li class="list-group-item"><strong>Address:</strong> <span id="apartmentAddress"></span></li>
+            <li class="list-group-item"><strong>City:</strong> <span id="apartmentCity"></span></li>
+            <li class="list-group-item"><strong>Country:</strong> <span id="apartmentCountry"></span></li>
+          </ul>
+          <a href="/" class="btn btn-secondary">Back to Listings</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const propertyId = urlParams.get('propertyId');
+
+    if (propertyId) {
+      fetch(`/api/apartments/${propertyId}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Apartment not found");
+          return res.json();
+        })
+        .then(data => {
+          document.getElementById("apartmentImage").src = data.imageUrl || "/img/placeholder.png";
+          document.getElementById("apartmentTitle").textContent = data.TITLE;
+          document.getElementById("apartmentDescription").textContent = data.DESCRIPTION;
+          document.getElementById("apartmentPrice").textContent = data.PRICEPERNIGHT;
+          document.getElementById("apartmentGuests").textContent = data.MAXGUESTS;
+          document.getElementById("apartmentBedrooms").textContent = data.BEDROOMS;
+          document.getElementById("apartmentBathrooms").textContent = data.BATHROOMS;
+          document.getElementById("apartmentAddress").textContent = data.ADDRESS;
+          document.getElementById("apartmentCity").textContent = data.CITY;
+          document.getElementById("apartmentCountry").textContent = data.COUNTRY;
+        })
+        .catch(err => {
+          console.error("Greška:", err);
+          document.querySelector(".container").innerHTML = '<div class="alert alert-danger">Apartment not found.</div>';
+        });
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

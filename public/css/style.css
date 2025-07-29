@@ -1,0 +1,25 @@
+.guests{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 10em;
+}
+#minusButton, #plusButton {
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+}
+
+.checkInError, .checkOutError, .maxGuests{
+    display: none;
+    font-size: 0.8em;
+    color: rgb(252, 85, 85);
+    margin-bottom: 0.3em;
+}
+.card-title {
+    min-height: 3em;
+}
+footer {
+    background-color: #f8f9fa;
+    padding: 1rem 0;
+}
